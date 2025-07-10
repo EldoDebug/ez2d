@@ -7,20 +7,19 @@
 
 class Rect;
 
-struct AnimationFrame {
-    float duration;
-    int frameIndex;
-};
-
-struct Animation {
-    std::vector<AnimationFrame> frames;
-    bool loop;
-    
-    Animation() : loop(true) {}
-};
-
 class SpriteAnimation {
     public:
+        struct AnimationFrame {
+            float duration;
+            int frameIndex;
+        };
+        
+        struct Animation {
+            std::vector<AnimationFrame> frames;
+            bool loop;
+            
+            Animation() : loop(true) {}
+        };
         SpriteAnimation(std::shared_ptr<Sprite> sprite);
         
         void addAnimation(const std::string& name, bool loop = true);

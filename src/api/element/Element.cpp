@@ -213,6 +213,7 @@ void Element::draw() {
 }
 
 void Element::update() {
+    updateMoveAnimation();
     if (!visible) return;
     
     for (auto& child : children) {
@@ -273,9 +274,25 @@ void Element::setCornerRadius(float radius) {
     this->cornerRadius = radius;
 }
 
+void Element::setMoveAnimation(float moveX, float moveY, Easing easing) {
+    moveAnimX = Animation(500.0f, moveX, 0.0f, easing);
+    moveAnimY = Animation(500.0f, moveY, 0.0f, easing);
+    moving = true;
+}
+
+void Element::updateMoveAnimation() {
+    if (moving) {
+        moveAnimX.update();
+        moveAnimY.update();
+        if (moveAnimX.isFinished() && moveAnimY.isFinished()) {
+            moving = false;
+        }
+    }
+}
+
 Point Element::getPosition() const {
-    float x = YGNodeLayoutGetLeft(yogaNode);
-    float y = YGNodeLayoutGetTop(yogaNode);
+    float x = YGNodeLayoutGetLeft(yogaNode) + moveAnimX.getValue();
+    float y = YGNodeLayoutGetTop(yogaNode) + moveAnimY.getValue();
     return Point(x, y);
 }
 

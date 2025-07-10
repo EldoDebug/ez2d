@@ -1,5 +1,6 @@
 #pragma once
 
+#include "../../Animation.hpp"
 #include <string>
 #include <yoga/Yoga.h>
 #include <memory>
@@ -157,6 +158,9 @@ class Element {
         static YGWrap toYGWrap(FlexWrap wrap);
         static YGPositionType toYGPositionType(PositionType position);
 
+        void setMoveAnimation(float moveX, float moveY, Easing easing);
+        void updateMoveAnimation();
+
     protected:
         YGNodeRef yogaNode;
         std::vector<std::shared_ptr<Element>> children;
@@ -171,6 +175,9 @@ class Element {
         std::shared_ptr<SpriteAnimation> spriteAnimation;
         float cornerRadius;
         bool visible;
+        
+        Animation moveAnimX, moveAnimY;
+        bool moving = false;
         
         void ensureLayoutMode(LayoutMode requiredMode);
         void applyLayoutMode(LayoutMode mode);
