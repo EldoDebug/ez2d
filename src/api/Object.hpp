@@ -26,10 +26,10 @@ class Object {
 
         UUID id;
         
-        Object(World* world, Object::Type type, Rect rect, bool isDynamic = true);
-        Object(World* world, Object::Type type, Point position, float radius, bool isDynamic = true);
-        Object(World* world, Object::Type type, Point point1, Point point2, Point point3, bool isDynamic = true);
-        Object(World* world, std::shared_ptr<Texture> texture, const Size& size, Point position = Point(0, 0), bool isDynamic = true);
+        Object(World* world, Object::Type type, Rect rect, bool isDynamic = true, bool rotatable = true);
+        Object(World* world, Object::Type type, Point position, float radius, bool isDynamic = true, bool rotatable = true);
+        Object(World* world, Object::Type type, Point point1, Point point2, Point point3, bool isDynamic = true, bool rotatable = true);
+        Object(World* world, std::shared_ptr<Texture> texture, const Size& size, Point position = Point(0, 0), bool isDynamic = true, bool rotatable = true);
         ~Object();
 
         void setPosition(Point position);
@@ -77,6 +77,8 @@ class Object {
         void draw();
         bool isDynamic() const;
         void setDynamic(bool dynamic);
+        void setRotatable(bool rotatable);
+        bool isRotatable() const;
         
     private:
         World* world;
@@ -95,6 +97,7 @@ class Object {
         std::shared_ptr<Sprite> sprite;
         int spriteIndex;
         std::shared_ptr<SpriteAnimation> spriteAnimation;
+        bool rotatable = true;
         
         void createBody(Point position, bool isDynamic);
         void createFixture();

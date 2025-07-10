@@ -23,7 +23,7 @@ class World {
         void setGravity(Point gravity);
         Point getGravity() const;
 
-        std::shared_ptr<Object> createRectObject(Rect rect, bool isDynamic = true);
+        std::shared_ptr<Object> createRectObject(Rect rect, bool isDynamic = true, bool rotatable = true);
 
         template<typename T, typename... Args>
         std::shared_ptr<T> createRectObject(Rect rect, bool isDynamic = true, Args&&... args) {
@@ -33,7 +33,7 @@ class World {
             return obj;
         }
 
-        std::shared_ptr<Object> createCircleObject(Point position, float radius, bool isDynamic = true);
+        std::shared_ptr<Object> createCircleObject(Point position, float radius, bool isDynamic = true, bool rotatable = true);
 
         template<typename T, typename... Args>
         std::shared_ptr<T> createCircleObject(Point position, float radius, bool isDynamic = true, Args&&... args) {
@@ -43,7 +43,7 @@ class World {
             return obj;
         }
 
-        std::shared_ptr<Object> createRoundedRectObject(Rect rect, float cornerRadius, bool isDynamic = true);
+        std::shared_ptr<Object> createRoundedRectObject(Rect rect, float cornerRadius, bool isDynamic = true, bool rotatable = true);
 
         template<typename T, typename... Args>
         std::shared_ptr<T> createRoundedRectObject(Rect rect, float cornerRadius, bool isDynamic = true, Args&&... args) {
@@ -53,7 +53,7 @@ class World {
             return obj;
         }
 
-        std::shared_ptr<Object> createTriangleObject(Point point1, Point point2, Point point3, bool isDynamic = true);
+        std::shared_ptr<Object> createTriangleObject(Point point1, Point point2, Point point3, bool isDynamic = true, bool rotatable = true);
 
         template<typename T, typename... Args>
         std::shared_ptr<T> createTriangleObject(Point point1, Point point2, Point point3, bool isDynamic = true, Args&&... args) {
@@ -71,7 +71,7 @@ class World {
             return obj;
         }
 
-        std::vector<std::shared_ptr<Object>> createPixelPerfectObjects(std::shared_ptr<Texture> texture, Rect rect, bool isDynamic = true);
+        std::vector<std::shared_ptr<Object>> createPixelPerfectObjects(std::shared_ptr<Texture> texture, Rect rect, bool isDynamic = true, bool rotatable = true);
         
         void preloadPixelPerfectPolygons(
             std::shared_ptr<Texture> texture, 

@@ -13,26 +13,26 @@
 #include <cmath>
 #include <algorithm>
 
-Object::Object(World* world, Object::Type type, Rect rect, bool isDynamic)
+Object::Object(World* world, Object::Type type, Rect rect, bool isDynamic, bool rotatable)
     : world(world), type(type), color(Color(255, 255, 255, 255)), cornerRadius(0.0f), 
-      width(rect.width), height(rect.height), radius(0.0f), texture(nullptr), sprite(nullptr), spriteAnimation(nullptr) {
+      width(rect.width), height(rect.height), radius(0.0f), texture(nullptr), sprite(nullptr), spriteAnimation(nullptr), rotatable(rotatable) {
     id = UUID::randomUUID();
     createBody(rect.toPoint(), isDynamic);
     createFixture();
 }
 
-Object::Object(World* world, Object::Type type, Point position, float radius, bool isDynamic)
+Object::Object(World* world, Object::Type type, Point position, float radius, bool isDynamic, bool rotatable)
     : world(world), type(type), color(Color(255, 255, 255, 255)), cornerRadius(0.0f),
-      width(radius * 2), height(radius * 2), radius(radius), texture(nullptr), sprite(nullptr), spriteAnimation(nullptr) {
+      width(radius * 2), height(radius * 2), radius(radius), texture(nullptr), sprite(nullptr), spriteAnimation(nullptr), rotatable(rotatable) {
     id = UUID::randomUUID();
     createBody(position, isDynamic);
     createFixture();
 }
 
-Object::Object(World* world, Object::Type type, Point point1, Point point2, Point point3, bool isDynamic)
+Object::Object(World* world, Object::Type type, Point point1, Point point2, Point point3, bool isDynamic, bool rotatable)
     : world(world), type(type), color(Color(255, 255, 255, 255)), cornerRadius(0.0f),
       trianglePoint1(point1), trianglePoint2(point2), trianglePoint3(point3),
-      texture(nullptr), sprite(nullptr), spriteAnimation(nullptr) {
+      texture(nullptr), sprite(nullptr), spriteAnimation(nullptr), rotatable(rotatable) {
     id = UUID::randomUUID();
     
     Point center((point1.x + point2.x + point3.x) / 3.0f, (point1.y + point2.y + point3.y) / 3.0f);
@@ -48,9 +48,9 @@ Object::Object(World* world, Object::Type type, Point point1, Point point2, Poin
     createFixture();
 }
 
-Object::Object(World* world, std::shared_ptr<Texture> texture, const Size& size, Point position, bool isDynamic)
+Object::Object(World* world, std::shared_ptr<Texture> texture, const Size& size, Point position, bool isDynamic, bool rotatable)
     : world(world), type(Object::Type::PixelPerfect), color(Color(255, 255, 255, 255)), cornerRadius(0.0f),
-      width(size.width), height(size.height), radius(0.0f), texture(texture), sprite(nullptr), spriteAnimation(nullptr) {
+      width(size.width), height(size.height), radius(0.0f), texture(texture), sprite(nullptr), spriteAnimation(nullptr), rotatable(rotatable) {
     id = UUID::randomUUID();
     
     auto polygons = PixelPerfectPolygon::extractPolygons(texture, size);
@@ -72,6 +72,7 @@ void Object::createBody(Point position, bool isDynamic) {
     b2BodyDef bodyDef = b2DefaultBodyDef();
     bodyDef.type = isDynamic ? b2_dynamicBody : b2_staticBody;
     bodyDef.position = {position.x, position.y};
+    bodyDef.fixedRotation = !rotatable;
     bodyId = b2CreateBody(world->getWorldId(), &bodyDef);
 }
 
@@ -409,4 +410,15 @@ void Object::draw() {
     }
     
     Renderer::restore();
+}
+
+void Object::setRotatable(bool rot)
+{
+    rotatable = rot;
+    b2Body_SetFixedRotation(bodyId, !rot);
+}
+
+bool Object::isRotatable() const
+{
+    return rotatable;
 }

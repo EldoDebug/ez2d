@@ -36,32 +36,32 @@ Point World::getGravity() const {
     return Point(gravity.x, gravity.y);
 }
 
-std::shared_ptr<Object> World::createRectObject(Rect rect, bool isDynamic) {
-    auto object = std::make_shared<Object>(this, Object::Type::Rect, rect, isDynamic);
+std::shared_ptr<Object> World::createRectObject(Rect rect, bool isDynamic, bool rotatable) {
+    auto object = std::make_shared<Object>(this, Object::Type::Rect, rect, isDynamic, rotatable);
     objects.push_back(object);
     return object;
 }
 
-std::shared_ptr<Object> World::createCircleObject(Point position, float radius, bool isDynamic) {
-    auto object = std::make_shared<Object>(this, Object::Type::Circle, position, radius, isDynamic);
+std::shared_ptr<Object> World::createCircleObject(Point position, float radius, bool isDynamic, bool rotatable) {
+    auto object = std::make_shared<Object>(this, Object::Type::Circle, position, radius, isDynamic, rotatable);
     objects.push_back(object);
     return object;
 }
 
-std::shared_ptr<Object> World::createRoundedRectObject(Rect rect, float cornerRadius, bool isDynamic) {
-    auto object = std::make_shared<Object>(this, Object::Type::RoundedRect, rect, isDynamic);
+std::shared_ptr<Object> World::createRoundedRectObject(Rect rect, float cornerRadius, bool isDynamic, bool rotatable) {
+    auto object = std::make_shared<Object>(this, Object::Type::RoundedRect, rect, isDynamic, rotatable);
     object->setCornerRadius(cornerRadius);
     objects.push_back(object);
     return object;
 }
 
-std::shared_ptr<Object> World::createTriangleObject(Point point1, Point point2, Point point3, bool isDynamic) {
-    auto object = std::make_shared<Object>(this, Object::Type::Triangle, point1, point2, point3, isDynamic);
+std::shared_ptr<Object> World::createTriangleObject(Point point1, Point point2, Point point3, bool isDynamic, bool rotatable) {
+    auto object = std::make_shared<Object>(this, Object::Type::Triangle, point1, point2, point3, isDynamic, rotatable);
     objects.push_back(object);
     return object;
 }
 
-std::vector<std::shared_ptr<Object>> World::createPixelPerfectObjects(std::shared_ptr<Texture> texture, Rect rect, bool isDynamic) {
+std::vector<std::shared_ptr<Object>> World::createPixelPerfectObjects(std::shared_ptr<Texture> texture, Rect rect, bool isDynamic, bool rotatable) {
     
     std::vector<std::shared_ptr<Object>> result;
     
@@ -73,7 +73,7 @@ std::vector<std::shared_ptr<Object>> World::createPixelPerfectObjects(std::share
     for (const auto& polygon : polygons) {
         if (polygon.size() >= 3) {
 
-            auto object = std::make_shared<Object>(this, Object::Type::PixelPerfect, rect, isDynamic);
+            auto object = std::make_shared<Object>(this, Object::Type::PixelPerfect, rect, isDynamic, rotatable);
             
             object->pixelPerfectVertices = polygon;
             object->setTexture(texture);
